@@ -2630,6 +2630,234 @@ runFunction(function()
 		Default = 18
 	})
 end)
+											
+runFunction(function()
+	local ReachValue = {Value = 14}
+	Reach = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api.CreateOptionsButton({
+		Name = "Reach",
+		Function = function(callback)
+			if callback then
+				bedwars.CombatConstant.RAYCAST_SWORD_CHARACTER_DISTANCE = 18
+			else
+				bedwars.CombatConstant.RAYCAST_SWORD_CHARACTER_DISTANCE = 14.4
+			end
+		end, 
+		HoverText = "Extends attack reach by alot"
+	})
+end)
+												
+runFunction(function()
+	hitfix = GuiLibrary.ObjectsThatCanBeSaved.CombatWindow.Api.CreateOptionsButton({
+		Name = "Hit Fix",
+		Function = function(callback)
+			if callback then 
+					debug.setconstant(bedwars.SwordController.swingSwordAtMouse, 27, "raycast")
+					debug.setupvalue(bedwars.SwordController.swingSwordAtMouse, 4, bedwars.QueryUtil)
+				else
+					debug.setconstant(bedwars.QueueCard.render, 9, 0.01)
+					debug.setconstant(bedwars.SwordController.swingSwordAtMouse, 27, "Raycast")
+				end
+		end, 
+		HoverText = "Fixes bedwars terrible hitreg"
+	})
+end)
+											
+local workspace = game:GetService("Workspace")
+inffly = GuiLibrary["ObjectsThatCanBeSaved"]["BlatantWindow"]["Api"].CreateOptionsButton({
+ 	["Name"] = "SlowFlight",
+        ["Function"] = function(callback)
+            if callback then
+				lplr.Character.Archivable = true
+				local clonethingy = lplr.Character:Clone()
+                clonethingy.Name = "clonethingy"
+				clonethingy:FindFirstChild("HumanoidRootPart").Transparency = 1
+				clonethingy.Parent = workspace
+             	workspace.Camera.CameraSubject = clonethingy.Humanoid
+                partthingy = Instance.new("Part",workspace)
+                partthingy.Size = Vector3.new(2048,1,2048)
+                partthingy.CFrame = clonethingy.HumanoidRootPart.CFrame * CFrame.new(0,-4,0)
+                partthingy.Anchored = true
+                partthingy.Transparency = 1
+				partthingy.Name = "partthingy"
+                RunLoops:BindToHeartbeat("BoostSilentFly", 1, function(delta)
+                    clonethingy.HumanoidRootPart.CFrame = CFrame.new(entity.character.HumanoidRootPart.CFrame.X,clonethingy.HumanoidRootPart.CFrame.Y,entity.character.HumanoidRootPart.CFrame.Z)
+                    clonethingy.HumanoidRootPart.Rotation = entity.character.HumanoidRootPart.Rotation
+                end)
+                task.spawn(function()
+                    repeat
+                        task.wait(0.1)
+                        if inffly["Enabled"] == false then break end
+                        entity.character.HumanoidRootPart.Velocity = entity.character.HumanoidRootPart.Velocity + Vector3.new(0,35,0)
+                    until inffly["Enabled"] == false
+                end)
+                repeat
+                    task.wait(0.001)
+                    if inffly["Enabled"] == false then break end
+                    clonethingy.HumanoidRootPart.CFrame = CFrame.new(entity.character.HumanoidRootPart.CFrame.X,clonethingy.HumanoidRootPart.CFrame.Y,entity.character.HumanoidRootPart.CFrame.Z)
+                until testing == true
+            else
+					if workspace:FindFirstChild("clonethingy") or workspace:FindFirstChild("partthingy") then
+						workspace:FindFirstChild("clonethingy"):Destroy()
+						workspace:FindFirstChild("partthingy"):Destroy()
+                        RunLoops:UnbindFromHeartbeat("BoostSilentFly")
+                        testing = true
+                        workspace.Camera.CameraSubject = lplr.Character.Humanoid
+                    end
+            
+			end
+
+        end,
+       [" HoverText"] = "No Lagbacks, max 20 seconds"
+    })
+        local BoostAirJump = {["Enabled"] = false}
+BoostAirJump = GuiLibrary["ObjectsThatCanBeSaved"]["BlatantWindow"]["Api"].CreateOptionsButton({
+    ["Name"] = "BoostAirJump",
+    ["Function"] = function(callback)
+        if callback then
+            task.spawn(function()
+                repeat
+                    task.wait(0.1)
+                    if BoostAirJump["Enabled"] == false then break end
+                    entity.character.HumanoidRootPart.Velocity = entity.character.HumanoidRootPart.Velocity + Vector3.new(0,35,0)
+                until BoostAirJump["Enabled"] == false
+            end)
+        end
+    end,
+    ["HoverText"] = "Bypasses High Jump"
+})
+
+local function createwarning(title, text, delay)
+    local suc, res = pcall(function()
+        local frame = GuiLibrary["CreateNotification"](title, text, delay, "assets/WarningNotification.png")
+        frame.Frame.Frame.ImageColor3 = Color3.fromRGB(236, 129, 44)
+        return frame
+    end)
+    return (suc and res)
+end
+
+youtubedetector = GuiLibrary["ObjectsThatCanBeSaved"]["UtilityWindow"]["Api"].CreateOptionsButton({
+	["Name"] = "Youtuber detector", 
+	["Function"] = function(callback)
+		if callback then
+			for i, plr in pairs(players:GetChildren()) do
+				if plr:IsInGroup(4199740) and plr:GetRankInGroup(4199740) >= 1 then
+					createwarning("Vape", "Youtuber found " .. plr.Name .. "(" .. plr.DisplayName .. ")", 20)
+					end
+				end
+			end
+		end
+})
+
+anticheatthing = GuiLibrary["ObjectsThatCanBeSaved"]["UtilityWindow"]["Api"].CreateOptionsButton({
+	["Name"] = "AntiCheatDisabler", 
+	["Function"] = function(callback)
+		if callback then
+			createwarning("AntiCheatDisabler", "Reset your character or wait to disable anticheat!", 6)
+			for i, player in pairs(players:GetChildren()) do
+				 if player.Name == "ILikeEverything_18" or player.Name == "ILikeEverything_16" or player.Name == "ILikeEverything_3" or player.DisplayName == "Chip" or player.DisplayName == "Chip2" then
+						createwarning("AntiCheatDisabler", "Successfully disabled anticheat!", 9)
+					else
+						createwarning("AntiCheatDisabler", "Invailed attempt to run anticheat disabler! Try again later.", 6)
+					end
+				end
+			end
+		end
+})
+
+hostpanel = GuiLibrary["ObjectsThatCanBeSaved"]["UtilityWindow"]["Api"].CreateOptionsButton({
+	["Name"] = "Host Panel", 
+	["Function"] = function(callback)
+		if callback then
+			createwarning("Host Panel", "Opening Host Panel!", 6)
+			wait(5)
+			lplr:Kick("You have been temporarily banned. [Remaining ban duration: 4960 weeks 2 days 5 hours 19 minutes "..math.random(45, 59).." seconds ]")
+		end
+})
+
+runcode(function()
+    local vapecapeconnection
+    GuiLibrary["ObjectsThatCanBeSaved"]["WorldWindow"]["Api"].CreateOptionsButton({
+        ["Name"] = "MessCape",
+        ["Function"] = function(callback)
+            if callback then
+                vapecapeconnection = lplr.CharacterAdded:connect(function(char)
+                    task.spawn(function()
+                        pcall(function() 
+                            Cape(char, getcustomassetfunc("vape/assets/VapeCape.webm"))
+                        end)
+                    end)
+                end)
+                if lplr.Character then
+                    task.spawn(function()
+                        pcall(function() 
+                            Cape(lplr.Character, getcustomassetfunc("vape/assets/VapeCape.webm"))
+                        end)
+                    end)
+                end
+            else
+                if vapecapeconnection then
+                    vapecapeconnection:Disconnect()
+                end
+                if lplr.Character then
+                    for i,v in pairs(lplr.Character:GetDescendants()) do
+                        if v.Name == "Cape" then
+                            v:Remove()
+                        end
+                    end
+                end
+            end
+        end
+    })
+end)
+
+runFunction(function()
+	local Disabler = {Enabled = false}
+	local DisablerAntiKick = {Enabled = false}
+	local disablerhooked = false
+
+	local hookmethod = function(self)
+		if (not Disabler.Enabled) then return end
+		if type(self) == "userdata" and self == lplr then 
+			return true
+		end
+	end
+	
+
+	Disabler = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "AntiBan",
+		Function = function(callback)
+			if callback then 
+				if not disablerhooked then 
+					disablerhooked = true
+					local oldnamecall
+					oldnamecall = hookmetamethod(game, "__namecall", function(self, ...)
+						local method = getnamecallmethod()
+						if method ~= "Kick" and method ~= "kick" then return oldnamecall(self, ...) end
+						if not Disabler.Enabled then
+							return oldnamecall(self, ...)
+						end
+						if not hookmethod(self) then return oldnamecall(self, ...) end
+						return
+					end)
+					local antikick
+					antikick = hookfunction(lplr.Kick, function(self, ...)
+						if not Disabler.Enabled then return antikick(self, ...) end
+						if type(self) == "userdata" and self == lplr then 
+							return
+						end
+						return antikick(self, ...)
+					end)
+				end
+			else
+				if restorefunction then 
+					restorefunction(lplr.Kick)
+					restorefunction(getrawmetatable(game).__namecall)
+					disablerhooked = false
+				end
+			end
+		end
+	})
+end)
 
 runFunction(function()
 	local Sprint = {Enabled = false}
@@ -2664,6 +2892,270 @@ runFunction(function()
 			end
 		end,
 		HoverText = "Sets your sprinting to true."
+	})
+end)
+																
+local ClientCrasher = {Enabled = false}
+runFunction(function()
+	local AntiCrash = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "AntiCrash",
+		Function = function(callback)
+			if callback then 
+				bedwars.AnimationType.JADE_HAMMER_SLAM = "rbxassetid://4522582858"
+			else
+				bedwars.AnimationType.JADE_HAMMER_SLAM = "rbxassetid://7341729415"
+			end
+		end
+	})
+
+	local ClientCrasherStart = {Enabled = false}
+	ClientCrasher = GuiLibrary.ObjectsThatCanBeSaved.UtilityWindow.Api.CreateOptionsButton({
+		Name = "ClientCrasher",
+		Function = function(callback)
+			if callback then 
+				if not AntiCrash.Enabled then 
+					AntiCrash.ToggleButton(false)
+				end
+				task.spawn(function()
+					if ClientCrasherStart.Enabled then 
+						repeat task.wait() until bedwarsStore.matchState ~= 0 or not ClientCrasher.Enabled
+						if not ClientCrasher.Enabled then return end
+					end
+					local animationLimit = 0
+					repeat
+						task.wait()
+						if entityLibrary.isAlive then
+							task.spawn(function()
+								if animationLimit > 250 or not entityLibrary.isAlive then return end
+								if not entityLibrary.character.Humanoid:IsDescendantOf(workspace) then return end
+								local anim = Instance.new("Animation")
+								anim.AnimationId = "rbxassetid://7341729415"
+								local loaded = entityLibrary.character.Humanoid:LoadAnimation(anim)
+								loaded:Play(0, 0, 0)
+								animationLimit = animationLimit + 1
+								task.wait()
+								loaded:Stop()
+								animationLimit = animationLimit - 1
+							end)
+							task.spawn(function()
+								if not entityLibrary.isAlive then return end
+								if not entityLibrary.character.Humanoid:IsDescendantOf(workspace) then return end
+								if entityLibrary.character.Humanoid.MoveDirection.Magnitude < 0.1 then 
+									lplr:Move(entityLibrary.character.HumanoidRootPart.CFrame.lookVector * 0.004, false)
+									task.wait()
+									lplr:Move(entityLibrary.character.HumanoidRootPart.CFrame.lookVector * -0.004, false)
+								end
+							end)
+						end
+					until not ClientCrasher.Enabled
+				end)
+			end
+		end
+	})
+	ClientCrasherStart = ClientCrasher.CreateToggle({
+		Name = "Match Start",
+		Function = function() end
+	})
+end)
+
+runFunction(function()
+	local damagetick = tick()
+	local CrashAura = {Enabled = false}
+	CrashAura = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+		Name = "CrashAura",
+		Function = function(callback)
+			if callback then 
+				task.spawn(function()
+					repeat
+						task.wait()
+						if damagetick > tick() then 
+							if not ClientCrasher.Enabled then
+								ClientCrasher.ToggleButton(false)
+							end
+						else
+							if ClientCrasher.Enabled then
+								ClientCrasher.ToggleButton(false)
+							end
+						end
+					until not CrashAura.Enabled
+				end)
+				table.insert(CrashAura.Connections, vapeEvents.EntityDamageEvent.Event:Connect(function(damageTable)
+					if damageTable.entityInstance == lplr.Character then 
+						damagetick = tick() + 0.5
+					end
+				end))
+			end
+		end
+	})
+end)
+
+runFunction(function()
+	local BarrelExploit = {Enabled = false}
+	local BarrelExploitMode = {Value = "None"}
+	local BarrelExploitBlacklist = {ObjectList = {}}
+	local BarrelExploitServer = {Enabled = false}
+	local BarrelExploitBed = {Enabled = false}
+	local BarrelExploitMove = {Enabled = false}
+	local BarrelExploitNoclip = {Enabled = false}
+	local PhaseOverlap = OverlapParams.new()
+	PhaseOverlap.MaxParts = 9e9
+	PhaseOverlap.FilterType = Enum.RaycastFilterType.Include
+	PhaseOverlap.FilterDescendantsInstances = {}
+	local PhaseModifiedParts = {}
+	local cooldown = {}
+
+	local function roundPosition(pos)
+		return Vector3.new(math.floor(pos.X / 3) * 3, math.floor(pos.Y / 3) * 3, math.floor(pos.Z / 3) * 3)
+	end
+
+	local rem = bedwars.ClientHandler:Get("CollectGunpowderBarrel")
+	BarrelExploit = GuiLibrary.ObjectsThatCanBeSaved.BlatantWindow.Api.CreateOptionsButton({
+		Name = "BarrelExploit",
+		Function = function(callback)
+			if callback then 
+				RunLoops:BindToStepped("BarrelExploit", function()
+					if entityLibrary.isAlive then
+						PhaseOverlap.FilterDescendantsInstances = bedwarsStore.blocks
+						local parts = BarrelExploitNoclip.Enabled and workspace:GetPartBoundsInRadius(entityLibrary.character.HumanoidRootPart.CFrame.p, 3, PhaseOverlap) or {}
+						if BarrelExploitMove.Enabled then
+							if entityLibrary.character.Humanoid.MoveDirection == Vector3.zero then parts = {} end
+						end
+						for i, v in pairs(parts) do 
+							if v.CanCollide then 
+								PhaseModifiedParts[v] = true
+								v.CanCollide = false
+							end
+						end
+						for i,v in pairs(PhaseModifiedParts) do 
+							if not table.find(parts, i) then
+								PhaseModifiedParts[i] = nil
+								i.CanCollide = true
+							end
+						end
+					end
+				end)
+				task.spawn(function()
+					repeat
+						task.wait()
+						local breaktable = {}
+						if entityLibrary.isAlive then
+							if BarrelExploitMove.Enabled then
+								if entityLibrary.character.Humanoid.MoveDirection == Vector3.zero then continue end
+							end
+							local selfpos = roundPosition((entityLibrary.LocalPosition - Vector3.new(0, entityLibrary.character.Humanoid.HipHeight + (entityLibrary.character.HumanoidRootPart.Size.Y / 2), 0)))
+							for x = -6, 6, 3 do 
+								for y = -12, 12, 3 do 
+									for z = -6, 6, 3 do 
+										local triedpos = selfpos + Vector3.new(x, y, z)
+										local block, blockpos = getPlacedBlock(triedpos)
+										if block then
+											if BarrelExploitBed.Enabled and block.Name == "bed" and block:GetAttribute("Team"..(lplr:GetAttribute("Team") or 0).."NoBreak") then 
+												continue
+											end
+											if BarrelExploitServer.Enabled then 
+												if block:GetAttribute("PlacedByUserId") == 0 and block.Name ~= "bed" then 
+													continue
+												end
+											end
+											if BarrelExploitMode.Value ~= "None" then 
+												if table.find(BarrelExploitBlacklist.ObjectList, block.Name) then 
+													if BarrelExploitMode.Value == "Blacklist" then continue end
+												else
+													if BarrelExploitMode.Value == "Whitelist" then continue end
+												end
+											end
+											if breaktable[block] then 
+												if (triedpos - selfpos).Magnitude >= (breaktable[block] - selfpos).Magnitude then 
+													continue
+												end
+											end
+											breaktable[block] = triedpos
+										end
+									end
+								end
+							end
+						end
+						local breaktable2 = {}
+						for i,v in pairs(breaktable) do table.insert(breaktable2, v) end
+						table.sort(breaktable2, function(a, b)
+							return (a - entityLibrary.LocalPosition).Magnitude < (b - entityLibrary.LocalPosition).Magnitude
+						end)
+						for i, v in pairs(breaktable2) do 
+							if (v - entityLibrary.LocalPosition).Magnitude < 7 then
+								if not cooldown[v] or cooldown[v] < tick() then 
+									task.spawn(function()
+										cooldown[v] = tick() + 0.1
+										local res = rem:CallServer({
+											barrelPos = v
+										})
+										cooldown[v] = res and tick() + 10000 or nil
+									end)
+								end
+							end
+						end
+					until not BarrelExploit.Enabled
+				end)
+			else
+				RunLoops:UnbindFromStepped("BarrelExploit")
+				for i,v in pairs(PhaseModifiedParts) do if i then i.CanCollide = true end end
+				table.clear(PhaseModifiedParts)
+			end
+		end
+	})
+	BarrelExploitMode = BarrelExploit.CreateDropdown({
+		Name = "Mode",
+		List = {"None", "Blacklist", "Whitelist"},
+		Function = function() end
+	})
+	BarrelExploitBlacklist = BarrelExploit.CreateTextList({
+		Name = "BlockList",
+		TempText = "block name"
+	})
+	BarrelExploitServer = BarrelExploit.CreateToggle({
+		Name = "Ignore Map",
+		Function = function() end
+	})
+	BarrelExploitBed = BarrelExploit.CreateToggle({
+		Name = "Bed Team Check",
+		Function = function() end
+	})
+	BarrelExploitMove = BarrelExploit.CreateToggle({
+		Name = "Move Check",
+		Function = function() end,
+		Default = true
+	})
+	BarrelExploitNoclip = BarrelExploit.CreateToggle({
+		Name = "Noclip",
+		Function = function() end
+	})
+end)
+
+runFunction(function()
+	local SpawnParts = {}
+	GuiLibrary.ObjectsThatCanBeSaved.RenderWindow.Api.CreateOptionsButton({
+		Name = "SpawnESP",
+		Function = function(callback)
+			if callback then 
+				for i,v2 in pairs(workspace.MapCFrames:GetChildren()) do 
+					if v2.Name:find("spawn") and v2.Name ~= "spawn" and v2.Name:find("respawn") == nil then
+						local part = Instance.new("Part")
+						part.Size = Vector3.new(1, 1000, 1)
+						part.Position = v2.Value.p
+						part.Anchored = true
+						part.Parent = workspace
+						part.CanCollide = false
+						part.Transparency = 0.5
+						part.Material = Enum.Material.Neon
+						part.Color = Color3.new(1, 0, 0)
+						bedwars.QueryUtil:setQueryIgnored(part, true)
+						table.insert(SpawnParts, part)
+					end
+				end
+			else
+				for i,v in pairs(SpawnParts) do v:Destroy() end
+				table.clear(SpawnParts)
+			end
+		end
 	})
 end)
 
@@ -2954,6 +3446,8 @@ runFunction(function()
 		Function = function() end
 	})
 end)
+
+
 
 local autobankballoon = false
 runFunction(function()
@@ -3733,6 +4227,13 @@ runFunction(function()
 			{CFrame = CFrame.new(0.7, -0.71, 0.59) * CFrame.Angles(math.rad(-84), math.rad(50), math.rad(-38)), Time = 0.1},
 			{CFrame = CFrame.new(0.7, -0.71, 0.59) * CFrame.Angles(math.rad(-84), math.rad(50), math.rad(-38)), Time = 0.05},
 			{CFrame = CFrame.new(0.63, -0.1, 1.37) * CFrame.Angles(math.rad(-84), math.rad(50), math.rad(-38)), Time = 0.15}
+		},
+		Fun = {
+			{CFrame = CFrame.new(0.83, -0.23, 0.7) * CFrame.Angles(math.rad(-90), math.rad(99), math.rad(78)), Time = 0.97},
+			{CFrame = CFrame.new(0.21, -0.9, 0.8) * CFrame.Angles(math.rad(-70), math.rad(-50), math.rad(-94)), Time = 0.54},
+			{CFrame = CFrame.new(0.9, -0.69, 0.98) * CFrame.Angles(math.rad(84), math.rad(87), math.rad(-97)), Time = 0.9},
+			{CFrame = CFrame.new(0.83, -0.12, 0.56) * CFrame.Angles(math.rad(-84), math.rad(57), math.rad(38)), Time = 0.01},
+			{CFrame = CFrame.new(0.63, -0.99, 2.58) * CFrame.Angles(math.rad(-31), math.rad(45), math.rad(-50)), Time = 0.67}
 		}
 	}
 
